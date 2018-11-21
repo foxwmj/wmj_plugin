@@ -1,7 +1,7 @@
 function! WMJ_line_zip(...)
 
 "====================
-echo "Usage: call WMJ_line_zip([sep_char])"
+echo "Usage: call WMJ_line_zip([sample_size default:2], [sep_char default:,])"
 "====================
 "
 
@@ -10,20 +10,23 @@ python << EOF
 import vim
 
 try:
-    sep = str( vim.eval("a:1") )
+    sample_size = int( vim.eval("a:1") )
+except:
+    sample_size = 2
+
+try:
+    sep = str( vim.eval("a:2") )
 except:
     sep = ","
 
 ta = ""
-tb = ""
 try:
     title = vim.current.buffer[0]
     ta = title.split(sep)
-
-    sample = vim.current.buffer[1]
-    tb = sample.split(sep)
 except:
-    print "No line 0 or line 1"
+    print "No line 0"
+
+
 
 try:
     max_string_a = max(ta, key=len)
@@ -34,9 +37,14 @@ try:
     ret.append("====== Sumary of CSV lines ======")
     ret.append("")
 
-    for a,b in zip(ta,tb):
-        line = format_string % (a, b)
-        ret.append(line)
+    for idx,line in enumerate(vim.current.buffer[1:sample_size+1]):
+        tb = line.split(sep)
+        
+        ret.append("------------ Sample %d" % (idx,) )
+        for a,b in zip(ta,tb):
+            line = format_string % (a, b)
+            ret.append(line)
+        ret.append("")
 
     vim.current.buffer[:] = ret
 except:
