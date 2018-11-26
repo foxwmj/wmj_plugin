@@ -1,7 +1,7 @@
-function! WMJ_line_zip(...)
+function! WMJ_zip_line(...)
 
 "====================
-echo "Usage: call WMJ_line_zip([sample_size default:2], [sep_char default:,])"
+echo "Usage: call WMJ_zip_line([sample_size default:2], [sep_char default:,])"
 "====================
 "
 
